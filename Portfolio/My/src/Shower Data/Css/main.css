@@ -1,0 +1,25 @@
+.card {
+    display: inline-flex;
+    margin: 30px;
+    border: 4px solid var(--recolor);
+    border-radius: 10px;
+    padding: 30px 10px 10px 10px;
+    margin-top: 80px;
+}
+.ImageUser {
+    border-radius: 25px;
+    overflow: hidden;
+    display: flex;
+}
+.Data{
+    display:none;
+}
+.card:hover~.Data{
+    display:flex;   
+}
+.Username {
+    width: 0;
+    position: relative;
+    bottom: 20px;
+    right: 70px;
+}

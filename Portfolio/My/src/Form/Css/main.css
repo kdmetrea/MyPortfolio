@@ -1,0 +1,148 @@
+body{
+    justify-content: center;
+    align-items: center;
+}
+.Wrapper{
+    position: relative;
+    width: 400px;
+    height: 440px;
+    background: transparent;
+    border: 3px solid var(--recolor);
+    border-radius: 20px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+}
+.WrapperRegister{
+    height: 590px;
+    top:30px;
+}
+.WrapperForgot{
+    height: 320px;
+    top:30px;
+}
+.Wrapper .Form{
+    width: 100%;
+    padding: 20px;
+    color: var(--recolor);
+}
+.Wrapper .Icon-Close{
+    position: absolute;
+    top:0;
+    right: 0;
+    width: 45px;
+    height: 45px;
+    background: var(--recolor);
+    border-bottom-left-radius: 20px;
+    cursor: pointer;
+    z-index: 1;
+    font-size: 2em;
+    color:var(--color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+input::file-selector-button {
+    font-weight: bold;
+    background-color: transparent;
+    color: var(--recolor);
+    border: thin solid var(--recolor);
+    border-radius: 3px;
+    transition: 0.5s;
+}
+input::file-selector-button:hover{
+    color: var(--color);
+    background-color: var(--recolor);
+    border: thin solid var(--color);
+}
+.Form h2{
+    font-size: 2em;
+    text-align: center;
+}
+.Input-Box{
+    position: relative;
+    width: 100%;
+    height: 50px;
+    border-bottom: 2px solid var(--recolor);
+    margin: 30px 0;
+}
+.Input-Box input::placeholder{
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    color: var(--recolor);
+    transform: translateY(-50%);
+    font-size: 1em;
+    font-weight: 500;
+    pointer-events: none;
+    transition: 0.5s;
+}
+.Input-Box input:focus::placeholder{
+    color: var(--color);
+}
+.Input-Box input{
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border:none;
+    font-size: 1em;
+    outline: none;
+    font-weight: 600;
+    color:var(--recolor);
+    padding: 0 35px 0 5px;
+}
+.Forgot{
+    font-size: 0.9em;
+    font-weight: 500;
+    margin: -15px 0 15px;
+    display: flex;
+    justify-content: space-between;
+}
+.Forgot a{
+    color: var(--recolor);
+    cursor: pointer;
+    text-decoration: none;
+}
+.Forgot a:hover{
+    text-decoration: underline;
+}
+.RegBut{
+    width: 100%;
+    height: 45px;
+    background: var(--recolor);
+    border: none;
+    outline: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    color: var(--color);
+    font-weight: 500;
+}
+.Input-Box .Icon{
+    position: absolute;
+    right: 8px;
+    font-size: 1.2em;
+    line-height: 57px;
+}
+.Сoup{
+    font-size: 0.9em;
+    color:var(--recolor);
+    text-align: center;
+    font-weight: 500;
+    margin: 25px 0 10px;
+}
+.Сoup p{
+    bottom: 10px;
+    position: relative;
+}
+.reg-link{
+    cursor: pointer;
+    color:var(--recolor);
+    text-decoration: none;
+    font-weight: 600;
+}
+.reg-link:hover{
+    text-decoration: underline;
+    color:var(--color-hov)
+}

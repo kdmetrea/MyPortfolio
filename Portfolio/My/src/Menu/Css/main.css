@@ -1,0 +1,162 @@
+header{
+    position: fixed;
+    top:0;
+    left:0;
+    width: 100%;
+    height: 60px;
+    padding: 20px 30px;
+    background: #f0a00c;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 99;
+}
+.Logo{
+    font-size: 1.7em;
+    color:var(--color);
+    text-decoration: none;
+    position: relative;
+    transition: 0.5s;
+}
+.Logo:hover{
+    color:var(--color-hov)
+}
+.Logo::after{
+    content: '';
+    position: absolute;
+    width: 100%;
+    left: 0;
+    bottom: 0;
+    transform-origin: right;
+    height: 3px;
+    background-color: var(--color-hov);
+    border-radius: 5px;
+    transform: scaleX(0);
+    transition: transform 0.5s;
+}
+.Logo:hover{
+    color:var(--color-hov);
+}
+.Logo:hover::after{
+    transform-origin: left;
+    transform: scaleX(1);
+}
+.Navigation a{
+    position: relative;
+    font-size: 1.1em;
+    color: var(--color);
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: 40px;
+    transition: 0.5s;
+}
+.Navigation input{
+    position: relative;
+    width: 100px;
+    color:var(--recolor);
+    background: transparent;
+    font-size: 1.1em;
+    border-color: var(--color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: 0.5s;
+    border-radius: 6px;
+    margin-left: 40px;
+}
+.Navigation input::-webkit-input-placeholder{
+    color:var(--color)
+}
+.Navigation input::-moz-placeholder{
+    color:var(--color)
+}
+.Navigation input:focus {
+    outline: 0;
+    background: var(--color);
+    border-color: #f0a00c;
+}
+.Navigation .BtnLogin{
+    width: 100px;
+    height: 30px;
+    background: transparent;
+    border: 2px solid var(--color);
+    outline: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.1em;
+    color:var(--color);
+    font-weight: 500;
+    margin-left: 40px;
+    transition: 0.5s;
+}
+.Navigation .BtnLogin:hover{
+    background: var(--color);
+    color:#f0a00c;
+}
+.Navigation a::after{
+    content: '';
+    position: absolute;
+    width: 100%;
+    left: 0;
+    bottom: -6px;
+    transform-origin: right;
+    height: 3px;
+    background-color: var(--color-hov);
+    border-radius: 5px;
+    transform: scaleX(0);
+    transition: transform 0.5s;
+}
+.Navigation a:hover{
+    color:var(--color-hov);
+}
+.Navigation a:hover::after{
+    transform-origin: left;
+    transform: scaleX(1);
+}
+.switch {
+    top: 11px;
+    left:20px;
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+.switch input {display:none;}
+.slider {
+    border-radius: 34px;
+    position: absolute;
+    cursor: pointer;
+    border: 2px solid var(--color);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: transparent;
+    border-color: var(--color);
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+.slider:before {
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left:2px;
+    top:2px;
+    background-image:url('../Images/moon-nbg.webp');
+    background-size: 35px 35px;
+    background-position: center;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+input:checked + .slider {
+    border-color: var(--color);
+}
+input:checked + .slider:before {
+    background-image:url('../Images/sun-nbg.webp');
+    background-size: 45px 45px;
+    background-position: center;
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
