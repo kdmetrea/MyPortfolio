@@ -1,5 +1,5 @@
 import Header from "./UI/header";
-import { Action, ShowData,ShowForm, useUserStore} from "./Helpers/header";
+import {useUserStore} from "./Helpers/header";
 import css from './Css/main.css'
 import Form from "../Form/Form";
 import Shower from "../Shower Data/Shower";

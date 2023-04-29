@@ -1,18 +1,17 @@
 import React, { useState } from "react"
 import { MdEmail, MdKey,MdPerson,MdClose,MdFilePresent,MdImage } from "react-icons/md";
-import { HiddeForm,GetApiForSubmit,decodePhoto } from "../Helpers/Form";
-import Form_Login from "./form_login";
+import { HiddeForm,GetApiForSubmit,decodePhoto,useFormStore } from "../Helpers/Form";
 
 function Form_Register(props){
-    var [click,setClick] = useState(false)
-    var [Error,setError] = useState()
-    var [Photo,setPhoto] = useState()
+    const [Photo,setPhoto] = useState()
+    const state = useFormStore()
 
     return(<React.StrictMode>
-        {click?<Form_Login/>:''}
         <div className = "Wrapper WrapperRegister">
         <span className="Icon-Close" onClick={()=>{
-            HiddeForm()
+            HiddeForm(props.state.setClick,props.state.click)
+            HiddeForm(state.setClickLogin,state.clickLogin)
+            HiddeForm(state.setClickRegister,state.clickRegister)
         }}>
         <MdClose/>
         </span>
@@ -30,7 +29,7 @@ function Form_Register(props){
                     'email' : e.target[2].value,},
                     'Bio' : e.target[3].value,
                     'Photo' : Photo,
-                    'HTMLCode' : ''},setError)
+                    'HTMLCode' : ''},state.setError)
            }
            else{setError('Слишком короткий Логин или Пароль')}
        }
@@ -64,8 +63,8 @@ function Form_Register(props){
         <div className="Сoup">
                 <p>Have an account?:
                     <a href="#" className="reg-link" onClick={()=>{
-                    setClick(true)
-                    HiddeForm()
+                    HiddeForm(state.setClickRegister,state.clickRegister)
+                    HiddeForm(state.setClickLogin,state.clickLogin)
                 }}>Login</a>
                 </p>
         </div>
