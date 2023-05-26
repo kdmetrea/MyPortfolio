@@ -34,7 +34,7 @@ export async function decodePhoto(text,setPhoto){
     let file = text.target.files[0] 
         if (file) {
         var reader = new FileReader();
-        reader.onload = setPhoto(btoa(e.target.result));
+        reader.onload = (text)=>setPhoto(btoa(text.target.result));
         reader.readAsBinaryString(file)
     }
 

@@ -1,12 +1,12 @@
+from django.shortcuts import get_object_or_404
 from .services.base_services import create_object, filter_objects
-from .services.services import ModelUser
-from .models import AdditionToUser, UserChat
+from .models import *
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth import login
 from rest_framework.response import Response
 from django.contrib.auth.hashers import make_password
-from drf_extra_fields.fields import Base64ImageField
+from drf_extra_fields.fields import Base64ImageField,Base64FileField
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only = True)
@@ -28,23 +28,17 @@ class AdditionToUserAndUserSerializer(serializers.ModelSerializer):
         if len(validated_data["HTMLCode"].split('<script>')) != 1:
             HTML_del = validated_data["HTMLCode"].split('<script>')[1].split('</script>')[0]
             validated_data["HTMLCode"] = validated_data["HTMLCode"].replace(HTML_del,'')
-        addition = create_object(ModelUser.objects,
+        addition = create_object(AdditionToUser.objects,
                                  **validated_data,
                                  user=user,Slug = user.username)
         return addition
 class ChatSerializer(serializers.ModelSerializer):
-    Users = AdditionToUserAndUserSerializer()
+    Image = Base64ImageField()
+    usernames = serializers.CharField(write_only = True)
+    Users = UserSerializer(many = True, read_only = True)
     class Meta:
-        model = UserChat
-        fields = ['Users']
-    def create(self, validated_data):
-        if self.request.user.is_authenticated:
-            Username_users = validated_data['Users'].split(',').append(self.request.user.username)
-            Users = filter_objects(User.objects,username__in = Username_users)
-            Chat = create_object(UserChat.objects,Users = Users)
-            return Chat
-        else:
-            return Response('Вы не зарегистрированы')
+        model = Chat
+        fields = ["Users",'Name','usernames','Image']
 class ForgotSerializer(serializers.Serializer):
     email = serializers.EmailField()
     login = serializers.CharField()
@@ -52,6 +46,28 @@ class EnterUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['password',"username","email"]
+class MassageSerializer(serializers.ModelSerializer):
+    user = AdditionToUserAndUserSerializer()
+    Chat = ChatSerializer()
+    Photo = Base64ImageField()
+    File = Base64FileField()
+    class Meta:
+        model = Massage
+        fields = ['Time',"FromUser","Chat","Text","Photo","File",'id']
+    def create(self, validated_data):
+        if self.request.user.is_authenticated:
+            user = self.request.user
+            Massages = create_object(Massage.objects,**validated_data,FromUser = user)
+            return Massages
+        else:
+            return Response('Вы не зарегистрированы')
+class PostSerializer(serializers.ModelSerializer):
+    FromUser = UserSerializer(read_only = True)
+    Photo = Base64ImageField()
+    File = Base64FileField()
+    class Meta:
+        model = Post
+        fields = ['Time',"FromUser","Text","Photo","File",'id']
 class AcceptRandom_codeSerializer(serializers.Serializer):
     random_code = serializers.CharField()
     email = serializers.EmailField()
@@ -59,3 +75,5 @@ class AcceptRandom_codeSerializer(serializers.Serializer):
     new_password = serializers.CharField()
 class SearchSerializer(serializers.Serializer):
     Slug = serializers.CharField()
+class LineSerializer(serializers.Serializer):
+    Post = PostSerializer(many = True)

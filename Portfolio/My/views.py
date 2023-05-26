@@ -32,22 +32,20 @@ class SearchApi(APIView):
         for addition in AllAdditions:
             if token_sort_ratio(addition.Slug,request.data['Slug']) >= 70:
                 if addition.Photo:
-                    print(addition.Photo)
-                    if addition.Photo_Thumbnail:
+                    if addition.Photo_Thumbnail and addition.Photo:
                         addition.Photo = addition.Photo_Thumbnail
-                    else:
+                    elif not addition.Photo_Thumbnail and addition.Photo:
                         addition.Photo_Thumbnail = addition.Photo
                         addition.save()
                         addition.Photo = addition.Photo_Thumbnail
-                    print(addition.Photo)
                 data.append(AdditionToUserAndUserSerializer(addition).data)
         return Response(data)
 class YourUserHomeApi(APIView):
     def get(self,request):
         return Response(request.user.username)
 class YourUserProfileApi(APIView):
-    def post(self,request):
-        YourUser = get_object_or_404(ModelUser,Slug = request.data['username'])
+    def get(self,request):
+        YourUser = get_object_or_404(ModelUser,Slug = request.user.username)
         return Response(AdditionToUserAndUserSerializer(YourUser).data)
 class AdditionToUserAPIList(APIView):
     def get(self,*args, **kwargs):
@@ -117,13 +115,106 @@ class ExitUserApi(APIView):
 class CreateChat(APIView):
     serializer_class = ChatSerializer
     def post(self,request):
-        seria = ChatSerializer(data = request.data)
+        if request.user.is_authenticated:
+            usernames = request.data['usernames'].split(',')
+            idUsers = []
+            Users = filter_objects(User.objects,username__in = usernames).values('id')
+            for idUser in Users:
+                idUsers.append(idUser['id'])
+            NewChat = Chat(Name = request.data['Name'],Image = request.data['Image'])
+            NewChat.save()
+            NewChat.Users.add(*idUsers)
+            return Response("")
+        else:
+            return Response('Вы не зарегистрированы')
+    def get(self,request):
+        if request.user.is_authenticated:
+            data = []
+            MyChat = filter_objects(Chat.objects,Users__in = [request.user])
+            for chat in MyChat:
+                data.append(ChatSerializer(chat).data)
+            return Response(data)
+        else:
+            return Response('Вы не зарегистрированы')
+class DeleteChat(APIView):
+    def delete(self,request,Name):
+        if request.user.is_authenticated:
+            get_object_or_404(Chat,Users__in = [request.user], Name = Name).delete()
+            return Response('')
+        else:
+            return Response('Вы не зарегистрированы')
+class ControlMassage(APIView):
+    serializer_class = MassageSerializer
+    def post(self,request):
+        seria = MassageSerializer(data = request.data)
         seria.is_valid(raise_exception = True)
         seria.save()
-        return Response("valid")
+        return Response('')
+    def get(self,request,Chat):
+        if request.user.is_authenticated:
+            Massages = filter_objects(Massage.objects,Chat = Chat)
+            return ChatSerializer(Massages).data
+        else:
+            return Response('Вы не зарегистрированы')
+class DeleteMassage(APIView):
+    def delete(self,request,id):
+        if request.user.is_authenticated:
+            get_object_or_404(Massage.objects,id = id,FromUser = request.user).delete()
+            return Response('')
+        else:
+            return Response('Вы не зарегистрированы')
+class ControlPost(APIView):
+    serializer_class = PostSerializer
+    def post(self,request,slug):
+        if request.user.is_authenticated:
+            user = get_object_or_404(User,username = slug)
+            create_object(Post.objects,
+                                Text = request.data['Text'],
+                                Photo = request.data['Photo'],
+                                File = request.data['File'],
+                                ForUser = user,
+                                FromUser = request.user
+                                ).save()
+            return Response('')
+        else:
+            return Response('Вы не зарегистрированы')
+    def get(self,request,slug):
+        if request.user.is_authenticated:
+            data = []
+            user = get_object_or_404(User,username = slug)
+            Posts = filter_objects(Post.objects,
+                                   FromUser = user)
+            for post in Posts:
+                data.append(PostSerializer(post).data)
+            print(data)
+            return Response(data)
+        else:
+            return Response('Вы не зарегистрированы')
+class DeletePost(APIView):
+    def delete(self,request,id):
+        if request.user.is_authenticated:
+            DelPost = get_object(Post.objects,id = id,FromUser = request.user)
+            if DelPost == None:
+                DelPost = get_object(Post.objects,id = id,ForUser = request.user)
+                if DelPost == None:
+                    return Response('Это не Ваш пост')
+                else:
+                    DelPost.delete()
+                    return Response('')
+            else:
+                DelPost.delete()
+                return Response('')
+        else:
+            return Response('Вы не зарегистрированы')
+class ShowLineNews(APIView):
     def get(self,request):
-        if self.request.user.is_authenticated:
-            Chat = filter_objects(UserChat.objects,Users = self.request.user.id)
-            return ChatSerializer(Chat).data
+        if request.user.is_authenticated:
+            data = []
+            Friend = get_object(AdditionToUser.objects, user = request.user).Friends
+            print(Friend,'not for')
+            for Frien in Friend:
+                print(Frien,'for')
+                data.append(LineSerializer(Frien.Posts).data)
+            return Response(data)
         else:
             return Response('Вы не зарегистрированы')

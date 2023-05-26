@@ -1,11 +1,10 @@
-import React, { useState } from "react"
-import { MdEmail, MdKey,MdPerson,MdClose,MdFilePresent,MdImage } from "react-icons/md";
+import React, { useEffect, useState } from "react"
+import { MdEmail, MdKey,MdPerson,MdClose,MdFilePresent,MdImage,MdFace,MdFaceRetouchingNatural } from "react-icons/md";
 import { HiddeForm,GetApiForSubmit,decodePhoto,useFormStore } from "../Helpers/Form";
 
 function Form_Register(props){
-    const [Photo,setPhoto] = useState()
+    let [Photo,setPhoto] = useState()
     const state = useFormStore()
-
     return(<React.StrictMode>
         <div className = "Wrapper WrapperRegister">
         <span className="Icon-Close" onClick={()=>{
@@ -20,14 +19,16 @@ function Form_Register(props){
     <form onSubmit=
         {(e)=>{
             const username = e.target[1].value
-            const password = e.target[4].value
+            const password = e.target[6].value
             if (username.length>4&&password.length>4){
                 GetApiForSubmit(e,
                     "/api/V1/AdditionToUsers/admin/",
                     {"user":{'password' : password,
+                    'first_name':e.target[2].value,
+                    'last_name':e.target[3].value,
                     'username' : username,
-                    'email' : e.target[2].value,},
-                    'Bio' : e.target[3].value,
+                    'email' : e.target[4].value,},
+                    'Bio' : e.target[5].value,
                     'Photo' : Photo,
                     'HTMLCode' : ''},state.setError)
            }
@@ -35,13 +36,21 @@ function Form_Register(props){
        }
    }
 >
-        <div className="Input-Box">
+        <div className="Input-Box Photo">
             <span className="Icon"><MdImage/></span>
-            <input type = "file" accept=".jpg, .jpeg, .png" onChange={(text)=>decodePhoto(text,setPhoto)}></input>
+            <input type = "file" accept=".jpg, .jpeg, .png" onChange={(text)=>{decodePhoto(text,setPhoto)}}></input>
         </div>
         <div className="Input-Box">
             <span className="Icon"><MdPerson/></span>
             <input type = "text" placeholder="Login"></input>
+        </div>
+        <div className="Input-Box">
+            <span className="Icon"><MdFace/></span>
+            <input type = "text" placeholder="first name"></input>
+        </div>
+        <div className="Input-Box">
+            <span className="Icon"><MdFaceRetouchingNatural/></span>
+            <input type = "text" placeholder="last name"></input>
         </div>
         <div className="Input-Box">
             <span className="Icon"><MdEmail/></span>

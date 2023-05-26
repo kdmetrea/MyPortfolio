@@ -55,7 +55,8 @@ export async function ChangeTheme(cookie){
 }
 export function setWhiteTheme(){
     if(!document.getElementById("favicon").href.includes('_white'))
-        {document.getElementById("favicon").href = document.getElementById("favicon").href.split('.')[0]+"_white."+document.getElementById("favicon").href.split('.')[1]}
+        {document.getElementById("favicon").href = document.getElementById("favicon").href.split('favicon')[0]+"favicon_white"+document.getElementById("favicon").href.split('favicon')[1]}
+    console.log(document.getElementById("favicon").href.split('favicon')[0])
     document.documentElement.style.setProperty('--color','wheat');
     document.documentElement.style.setProperty('--color-hov','aliceblue');
     document.documentElement.style.setProperty('--recolor','#3e3e3e')

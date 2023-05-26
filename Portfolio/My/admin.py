@@ -3,4 +3,5 @@ from .models import *
 
 admin.site.register(AdditionToUser)
 admin.site.register(Massage)
-admin.site.register(UserChat)
+admin.site.register(Post)
+admin.site.register(Chat)

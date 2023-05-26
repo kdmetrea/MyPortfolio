@@ -1,22 +1,13 @@
-import React from "react"
+import React, { useState } from "react"
 import { GetData } from "./Helpers/Home"
 import Menu from "../Menu/Menu"
 
-class Root_Home extends React.Component{
-    constructor(props){
-    super(props)
-    this.state = {
-        Data:[]
-    }
-    this.setData = this.setData.bind(this)
-}
-setData =data=>this.setState({Data:data})
-    
-    render(){
-        GetData(this.props,this.state.Data,this.setData)
-        if(this.state.Data.length != 0){
+function Root_Home(props){
+var [Data,setData] = useState([])
+        GetData(props,Data,setData)
+        if(Data.length != 0){
             return(<div className="Root">
-                <Menu Logo = {this.state.Data}/>
+                <Menu Logo = {Data}/>
             </div>)
             }
         else{
@@ -24,5 +15,4 @@ setData =data=>this.setState({Data:data})
                 <Menu/>           
             </div>)}
             }
-        }
 export default Root_Home

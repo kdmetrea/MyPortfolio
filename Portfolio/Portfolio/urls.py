@@ -20,7 +20,17 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',include('My.urls'))
+    path('',include('My.urls')),
 ]
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+    import debug_toolbar
+
+    import mimetypes
+
+    mimetypes.add_type("application/javascript", ".js", True)
+
+    urlpatterns = [
+    path('__debug__/', include(debug_toolbar.urls)),
+    ] + urlpatterns
+
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
