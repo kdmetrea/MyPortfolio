@@ -9,7 +9,6 @@ function Base_Data(props){
                 </div>
                 <div className="Username">{props.data.user.username}</div>
                 <div className="Data_base">
-                    <br/>
                     {props.data.Bio}
                     <div className="BtnProfile">
                     <a href={'/Profile/'+props.data.user.username+'/Page/'}>Page</a>
