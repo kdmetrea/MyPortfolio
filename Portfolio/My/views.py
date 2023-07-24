@@ -50,7 +50,6 @@ class YourUserProfileApi(APIView):
 class AdditionToUserAPIList(APIView):
     def get(self,*args, **kwargs):
         slug = kwargs.get('slug')
-        print(slug)
         if slug == 'all':
             additions = all_objects(ModelUser.objects)
             addition = []
@@ -64,7 +63,6 @@ class AdditionToUserAPIList(APIView):
         seria.is_valid(raise_exception = True)
         seria.save()
         user = get_object_or_404(ModelUser,Slug = request.data['user']['username'])
-        print(request.data['user']['username'],request.data['user']['password'])
         login(request,user.user)
         return Response('')
 class ForgotPasswordApi(APIView):
@@ -78,7 +76,6 @@ class ForgotPasswordApi(APIView):
             random_code = ''.join(str(el) for el in random_code)
             addition = get_object_or_404(ModelUser,user = user)
             addition.Random_code_for_password = random_code
-            print(random_code)
             addition.save()
             email = []
             email.append(request.data['email'])
@@ -143,50 +140,48 @@ class DeleteChat(APIView):
             return Response('')
         else:
             return Response('Вы не зарегистрированы')
-class ControlMassage(APIView):
-    serializer_class = MassageSerializer
+class ControlMessage(APIView):
+    serializer_class = MessageSerializer
     def post(self,request):
-        seria = MassageSerializer(data = request.data)
-        seria.is_valid(raise_exception = True)
-        seria.save()
-        return Response('')
-    def get(self,request,Chat):
-        if request.user.is_authenticated:
-            Massages = filter_objects(Massage.objects,Chat = Chat)
-            return ChatSerializer(Massages).data
+        if self.request.user.is_authenticated:
+            FromUser = self.request.user
+            chat = get_object_or_404(Chat, Name = request.data['Chat'])
+            NewMessage = create_object(ModelMessage.objects, File = request.data['File'], Photo = request.data['Photo'], FromUser = FromUser, Chat = chat)
+            chat.Mеssages.add(NewMessage)
+            NewMessage.save()
+            return Response('')
         else:
             return Response('Вы не зарегистрированы')
-class DeleteMassage(APIView):
+        return Response('')
+class DeleteMessage(APIView):
     def delete(self,request,id):
         if request.user.is_authenticated:
-            get_object_or_404(Massage.objects,id = id,FromUser = request.user).delete()
+            get_object_or_404(Message.objects,id = id,FromUser = request.user).delete()
             return Response('')
         else:
             return Response('Вы не зарегистрированы')
 class ControlPost(APIView):
     serializer_class = PostSerializer
-    def post(self,request,slug):
+    def post(self,request):
         if request.user.is_authenticated:
-            user = get_object_or_404(User,username = slug)
+            ForUser = get_object_or_404(User,username = request.data["ForUser"])
             create_object(Post.objects,
                                 Text = request.data['Text'],
                                 Photo = request.data['Photo'],
                                 File = request.data['File'],
-                                ForUser = user,
+                                ForUser = ForUser,
                                 FromUser = request.user
                                 ).save()
             return Response('')
         else:
             return Response('Вы не зарегистрированы')
-    def get(self,request,slug):
+    def get(self,request):
         if request.user.is_authenticated:
             data = []
-            user = get_object_or_404(User,username = slug)
             Posts = filter_objects(Post.objects,
-                                   FromUser = user)
+                                   FromUser = request.user)
             for post in Posts:
                 data.append(PostSerializer(post).data)
-            print(data)
             return Response(data)
         else:
             return Response('Вы не зарегистрированы')
@@ -211,9 +206,7 @@ class ShowLineNews(APIView):
         if request.user.is_authenticated:
             data = []
             Friend = get_object(AdditionToUser.objects, user = request.user).Friends
-            print(Friend,'not for')
             for Frien in Friend:
-                print(Frien,'for')
                 data.append(LineSerializer(Frien.Posts).data)
             return Response(data)
         else:

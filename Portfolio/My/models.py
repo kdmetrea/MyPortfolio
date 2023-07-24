@@ -4,10 +4,10 @@ from django.urls import reverse
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
 
-def Massage_Photo_directory_path(instance, filename):
+def Message_Photo_directory_path(instance, filename):
     return '{0}/Massage/Photo/{1}'.format(instance.FromUser.username, filename)
 
-def Massage_File_directory_path(instance, filename):
+def Message_File_directory_path(instance, filename):
     return '{0}/Massage/File/{1}'.format(instance.FromUser.username, filename)
 
 def Post_Photo_directory_path(instance, filename):
@@ -50,20 +50,20 @@ class AdditionToUser(models.Model):
     def __str__(self):
         return self.user.username
 
-class Massage(models.Model):
+class Mеssage(models.Model):
     Time = models.DateTimeField(auto_now_add=True)
     FromUser = models.ForeignKey(User,on_delete=models.CASCADE)
-    Chat = models.ForeignKey("Chat",on_delete=models.CASCADE)
     Text = models.TextField(blank = True)
-    Photo = models.ImageField(blank = True,upload_to = Massage_Photo_directory_path)
-    File = models.FileField(blank = True,upload_to=Massage_File_directory_path)
-    
+    Photo = models.ImageField(blank = True,upload_to = Message_Photo_directory_path)
+    File = models.FileField(blank = True,upload_to=Message_File_directory_path)
+    Chat = models.ForeignKey('Chat', on_delete = models.DO_NOTHING, related_name = 'Chat')
+	
     class Meta:
         verbose_name = ("Сообщение")
         verbose_name_plural = ("Сообщения")
         
     def __str__(self):
-        return "Сообщение от "+self.user.username
+        return "Сообщение от "+self.FromUser.username
     
 class Post(models.Model):
     FromUser = models.ForeignKey(User,on_delete = models.CASCADE,related_name = 'FromUser')
@@ -81,7 +81,8 @@ class Chat(models.Model):
     Name = models.SlugField(unique=True,max_length=128)
     Image = models.ImageField(blank = True,upload_to = Chat_Image_directory_path)
     Users = models.ManyToManyField(User,related_name = 'Users')
-    
+    Mеssages = models.ManyToManyField(Mеssage,related_name = 'Message')
+	
     class Meta:
         verbose_name = ("Чат")
         verbose_name_plural = ("Чаты")

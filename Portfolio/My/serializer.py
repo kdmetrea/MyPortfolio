@@ -32,13 +32,21 @@ class AdditionToUserAndUserSerializer(serializers.ModelSerializer):
                                  **validated_data,
                                  user=user,Slug = user.username)
         return addition
+class MessageSerializer(serializers.ModelSerializer):
+    Photo = Base64ImageField() 
+    File = Base64FileField()
+    Chat = serializers.CharField(write_only = True)
+    class Meta:
+        model = Mеssage
+        fields = ['Time',"Text","Photo","File","Chat", 'id']
 class ChatSerializer(serializers.ModelSerializer):
     Image = Base64ImageField()
     usernames = serializers.CharField(write_only = True)
     Users = UserSerializer(many = True, read_only = True)
+    Mеssages = MessageSerializer(many = True,read_only = True)
     class Meta:
         model = Chat
-        fields = ["Users",'Name','usernames','Image']
+        fields = ["Users",'Name','usernames','Image', 'Mеssages']
 class ForgotSerializer(serializers.Serializer):
     email = serializers.EmailField()
     login = serializers.CharField()
@@ -46,28 +54,14 @@ class EnterUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['password',"username","email"]
-class MassageSerializer(serializers.ModelSerializer):
-    user = AdditionToUserAndUserSerializer()
-    Chat = ChatSerializer()
-    Photo = Base64ImageField()
-    File = Base64FileField()
-    class Meta:
-        model = Massage
-        fields = ['Time',"FromUser","Chat","Text","Photo","File",'id']
-    def create(self, validated_data):
-        if self.request.user.is_authenticated:
-            user = self.request.user
-            Massages = create_object(Massage.objects,**validated_data,FromUser = user)
-            return Massages
-        else:
-            return Response('Вы не зарегистрированы')
 class PostSerializer(serializers.ModelSerializer):
     FromUser = UserSerializer(read_only = True)
+    ForUser = serializers.CharField(write_only = True)
     Photo = Base64ImageField()
     File = Base64FileField()
     class Meta:
         model = Post
-        fields = ['Time',"FromUser","Text","Photo","File",'id']
+        fields = ['Time',"FromUser","Text","Photo","File",'id', "ForUser"]
 class AcceptRandom_codeSerializer(serializers.Serializer):
     random_code = serializers.CharField()
     email = serializers.EmailField()
