@@ -28,17 +28,9 @@ class SearchApi(APIView):
     @csrf_exempt
     def post(self,request):
         data = []
-        AllAdditions = all_objects(ModelUser.objects)
-        for addition in AllAdditions:
-            if token_sort_ratio(addition.Slug,request.data['Slug']) >= 70:
-                if addition.Photo:
-                    if addition.Photo_Thumbnail and addition.Photo:
-                        addition.Photo = addition.Photo_Thumbnail
-                    elif not addition.Photo_Thumbnail and addition.Photo:
-                        addition.Photo_Thumbnail = addition.Photo
-                        addition.save()
-                        addition.Photo = addition.Photo_Thumbnail
-                data.append(AdditionToUserAndUserSerializer(addition).data)
+        Additions = filter_objects(ModelUser.objects, Slug__in = [request.data['Slug']])
+        for Addition in Additions:
+            data.append(AdditionToUserAndUserSerializer(Addition).data)
         return Response(data)
 class YourUserHomeApi(APIView):
     def get(self,request):
