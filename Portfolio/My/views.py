@@ -28,10 +28,13 @@ class SearchApi(APIView):
     @csrf_exempt
     def post(self,request):
         data = []
-        Additions = filter_objects(ModelUser.objects, Slug__in = [request.data['Slug']])
-        for Addition in Additions:
-            data.append(AdditionToUserAndUserSerializer(Addition).data)
-        return Response(data)
+        if len(request.data['Slug'])>=3:
+            Additions = filter_objects(ModelUser.objects, Slug__icontains = request.data['Slug'])
+            for Addition in Additions:
+                data.append(AdditionToUserAndUserSerializer(Addition).data)
+            return Response(data)
+        else:
+            return Response("")
 class YourUserHomeApi(APIView):
     def get(self,request):
         return Response(request.user.username)
@@ -148,7 +151,7 @@ class ControlMessage(APIView):
 class DeleteMessage(APIView):
     def delete(self,request,id):
         if request.user.is_authenticated:
-            get_object_or_404(Message.objects,id = id,FromUser = request.user).delete()
+            get_object_or_404(Mеssage.objects,id = id,FromUser = request.user).delete()
             return Response('')
         else:
             return Response('Вы не зарегистрированы')

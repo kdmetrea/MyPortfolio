@@ -4,8 +4,9 @@
     // Для получения дополнительной информации посетите: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
         {
-            "command": "npm run dev",
+            "command": "cd Portfolio&&sudo npm run dev",
             "name": "Run npm start",
             "request": "launch",
             "type": "node-terminal"
@@ -16,6 +17,15 @@
             "name": "Запустить Chrome на localhost",
             "url": "http://localhost:8000/Home",
             "webRoot": "${workspaceFolder}"
+        },
+        {
+            "name": "Python Debugger: Django",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/Portfolio/manage.py",
+            "args": ["runserver"],
+            "django": true,
+            "justMyCode": true
         }
     ]
 }
