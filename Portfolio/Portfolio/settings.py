@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 import os
-from  .Secret.secret import *
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,7 +19,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
-SECRET_KEY = SECRET
+SECRET_KEY = "django-insecure-v98sx2o@46w&wt3c$*0x_)y43sa8ku1co0^&j&v@kync2b-%xx"
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
@@ -134,8 +133,8 @@ MEDIA_ROOT=os.path.join(BASE_DIR,'Users')
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = EMAIL_USER
-EMAIL_HOST_PASSWORD = EMAIL_PASSWORD
+EMAIL_HOST_USER = 'kdmetrea@gmail.com'
+EMAIL_HOST_PASSWORD = 'irswtyvepqloquwx'
 EMAIL_PORT = 587
 DATABASES = {
     'default': {
@@ -143,7 +142,7 @@ DATABASES = {
         'OPTIONS': {
             'database':'myportfolio',
             'user':'root',
-            'password':'kdroot1234',
+            'password':'dmikohs1',
         },
     }
 }
