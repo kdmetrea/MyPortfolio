@@ -4,8 +4,8 @@
   "description": "Frontend by My portfolio",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack --mode development ./My/src/index.js --output-path ./My/static/frontend/&&python manage.py runserver",
-    "build": "webpack --mode production ./My/src/index.js --output-path ./My/static/frontend/main.js"
+    "dev": "sudo webpack --mode development ./My/src/index.js --output-path ./My/static/frontend/&&python manage.py runserver",
+    "build": "sudo webpack --mode production ./My/src/index.js --output-path ./My/static/frontend/main.js"
   },
   "author": "",
   "license": "ISC",
@@ -30,7 +30,7 @@
     "universal-cookie": "^4.0.4",
     "vite": "^4.3.1",
     "vite-plugin-html": "^3.2.0",
-    "webpack": "^5.76.0",
+    "webpack": "^5.92.0",
     "webpack-cli": "^5.0.1",
     "zustand": "^4.3.7"
   },
